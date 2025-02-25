@@ -24,36 +24,38 @@ public class COSC322Test extends GamePlayer{
 	
     private String userName = null;
     private String passwd = null;
- 
-	
-    /**
-     * The main method
-     * @param args for name and passwd (current, any string would work)
-     */
-    public static void main(String[] args) {				 
-    	COSC322Test player = new COSC322Test("cosc322", "cosc322");
-    	
-    	if(player.getGameGUI() == null) {
-    		player.Go();
-    	}
-    	else {
-    		BaseGameGUI.sys_setup();
-            java.awt.EventQueue.invokeLater(new Runnable() {
-                public void run() {
-                	player.Go();
-                }
-            });
-    	}
-    }
-	
-    /**
-     * Any name and passwd 
-     * @param userName
-     * @param passwd
-     */
-    public COSC322Test(String userName, String passwd) {
-    	this.userName = userName;
-    	this.passwd = passwd;
+    COSC322Timer timer;
+     
+      
+        /**
+         * The main method
+         * @param args for name and passwd (current, any string would work)
+         */
+        public static void main(String[] args) {				 
+          COSC322Test player = new COSC322Test("cosc322", "cosc322");
+          
+          if(player.getGameGUI() == null) {
+            player.Go();
+          }
+          else {
+            BaseGameGUI.sys_setup();
+                java.awt.EventQueue.invokeLater(new Runnable() {
+                    public void run() {
+                      player.Go();
+                    }
+                });
+          }
+        }
+      
+        /**
+         * Any name and passwd 
+         * @param userName
+         * @param passwd
+         */
+        public COSC322Test(String userName, String passwd) {
+          this.userName = userName;
+          this.passwd = passwd;
+          this.timer = new COSC322Timer(); 
     	
     	//To make a GUI-based player, create an instance of BaseGameGUI
     	//and implement the method getGameGUI() accordingly
@@ -76,18 +78,17 @@ public class COSC322Test extends GamePlayer{
         gameClient.joinRoom(rooms.get(1).getName());
 		
 		userName = gameClient.getUserName();
-		if(gamegui != null) {
-			gamegui.setRoomInformation(gameClient.getRoomList());
-		}
+      if(gamegui != null) {
+        gamegui.setRoomInformation(gameClient.getRoomList());
+      }
     }
 
     @Override
     public boolean handleGameMessage(String messageType, Map<String, Object> msgDetails) {
-		if (messageType.equals(GameMessage.GAME_STATE_BOARD)){
-			ArrayList <Integer> gameState =(ArrayList <Integer>) msgDetails.get("game-state");
-			gamegui.setGameState(gameState);
-			
-		}
+      if (messageType.equals(GameMessage.GAME_STATE_BOARD)){
+        ArrayList <Integer> gameState =(ArrayList <Integer>) msgDetails.get("game-state");
+        gamegui.setGameState(gameState);
+      }
 		return true;  
     }
     
@@ -115,5 +116,4 @@ public class COSC322Test extends GamePlayer{
     	gameClient = new GameClient(userName, passwd, this);			
 	}
 
- 
 }//end of class
