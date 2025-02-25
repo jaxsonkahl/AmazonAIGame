@@ -24,7 +24,6 @@ public class COSC322Test extends GamePlayer{
 	
     private String userName = null;
     private String passwd = null;
-    COSC322Timer timer;
      
       
         /**
@@ -55,7 +54,6 @@ public class COSC322Test extends GamePlayer{
         public COSC322Test(String userName, String passwd) {
           this.userName = userName;
           this.passwd = passwd;
-          this.timer = new COSC322Timer(); 
     	
     	//To make a GUI-based player, create an instance of BaseGameGUI
     	//and implement the method getGameGUI() accordingly
