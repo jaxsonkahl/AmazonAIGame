@@ -1,4 +1,4 @@
-package ubc;
+package ubc.cosc322;
 
 public class Tiles {
     private int row, column;
