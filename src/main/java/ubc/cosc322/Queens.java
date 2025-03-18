@@ -15,6 +15,7 @@ public class Queens extends Tiles {
         this.previousRow = xCoord;
         this.previousColumn = yCoord;
         this.opponent = opponent;
+        this.actions = new Actions(); 
     }
 
     // Getter and setter for previous row position
