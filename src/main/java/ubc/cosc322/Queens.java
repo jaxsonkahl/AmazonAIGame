@@ -5,8 +5,9 @@ import java.util.ArrayList;
 public class Queens extends Tiles {
     private int previousRow, previousColumn; // Previous position coordinates
     private int shotX, shotY;   // Arrow shot coordinates
-    private boolean opponent;   // pponent status
+    private boolean opponent;   // opponent status
 
+    // Constructor to initialize the queen's position and opponent status
     public Queens(int xCoord, int yCoord, boolean opponent) {
         super(xCoord, yCoord); // coordinates for current position
         this.previousRow = xCoord;
@@ -14,6 +15,7 @@ public class Queens extends Tiles {
         this.opponent = opponent;
     }
 
+    // Getter and setter for previous row position
     public int getPriorX() {
         return previousRow;
     }
@@ -22,6 +24,7 @@ public class Queens extends Tiles {
         this.previousRow = previousRow;
     }
 
+    // Getter and setter for previous column position
     public int getPriorY() {
         return previousColumn;
     }
@@ -30,6 +33,7 @@ public class Queens extends Tiles {
         this.previousColumn = previousColumn;
     }
 
+    // Getter and setter for shot X coordinate
     public int getShotX() {
         return this.shotX;
     }
@@ -38,6 +42,7 @@ public class Queens extends Tiles {
         this.shotX = shotX;
     }
 
+    // Getter and setter for shot Y coordinate
     public int getShotY() {
         return this.shotY;
     }
@@ -46,10 +51,12 @@ public class Queens extends Tiles {
         this.shotY = shotY;
     }
 
+    // Check if the queen is an opponent
     public boolean isOpponent() {
         return opponent;
     }
 
+    // Method to select the optimal shot based on the game state
     public ArrayList<Integer> selectOptimalShot(GameState gameState) {
         int[][] evalGrid = new int[10][10]; // Scored board for evaluation
 
@@ -68,6 +75,7 @@ public class Queens extends Tiles {
                 for (int yCoord = 0; yCoord < 10; yCoord++) {
                     if (evalGrid[xCoord][yCoord] == 0) {
                         pointValue = 0;
+                        // Evaluate surrounding cells
                         if (xCoord > 0 && evalGrid[xCoord - 1][yCoord] == 3) pointValue += 3;
                         if (xCoord < 9 && evalGrid[xCoord + 1][yCoord] == 3) pointValue += 3;
                         if (yCoord > 0 && evalGrid[xCoord][yCoord - 1] == 3) pointValue += 3;
@@ -79,12 +87,13 @@ public class Queens extends Tiles {
             }
         }
 
-        Moves moveGenerator = new Moves(); // new Moves instance when implemented
-        moveGenerator.availableArrows(gameState.getBoardState(), this);
+        Actions actionGenerator = new Actions();
+        actionGenerator.availableArrows(gameState.getBoardState(), this); // Generate available arrow shots (NEEDS BOARD STATE IMPLEMENTATION)
         ArrayList<Integer> bestShot = new ArrayList<>();
         int topScore = -99;
 
-        for (ArrayList<Integer> option : moveGenerator.arrowShots) {
+        // Evaluate each possible arrow shot
+        for (ArrayList<Integer> option : actionGenerator.arrowShots) {
             int newX = this.getRow() + option.get(0);
             int newY = this.getColumn() + option.get(1);
             int shotValue = evalGrid[newX][newY];
@@ -98,6 +107,7 @@ public class Queens extends Tiles {
         return bestShot;
     }
 
+    // Method to update the queen's position
     public void setPosition(int newX, int newY) {
         this.previousRow = this.getRow();
         this.previousColumn = this.getColumn();
