@@ -23,7 +23,7 @@ public class Actions {
 		for(int i=1; i<10; ++i) {
 			if(queenRow - i < 0) { // Check if out of bounds
 				break;
-			} else if(board.board[queenRow - i][queenCol] != null) { // Check if the cell is occupied
+			} else if(board.boardState[queenRow - i][queenCol] != null) { // Check if the cell is occupied
 				break;
 			}
 			move = new ArrayList<>();
@@ -36,7 +36,7 @@ public class Actions {
 		for(int i=1; i<10; ++i) {
 			if(queenRow + i > 9) { // Check if out of bounds
 				break;
-			} else if(board.board[queenRow + i][queenCol] != null) { // Check if the cell is occupied
+			} else if(board.boardState[queenRow + i][queenCol] != null) { // Check if the cell is occupied
 				break;
 			}
 			move = new ArrayList<>();
@@ -49,7 +49,7 @@ public class Actions {
 		for(int i=1; i<10; ++i) {
 			if(queenCol - i < 0) { // Check if out of bounds
 				break;
-			} else if(board.board[queenRow][queenCol - i] != null) { // Check if the cell is occupied
+			} else if(board.boardState[queenRow][queenCol - i] != null) { // Check if the cell is occupied
 				break;
 			}
 			move = new ArrayList<>();
@@ -62,7 +62,7 @@ public class Actions {
 		for(int i=1; i<10; ++i) {
 			if(queenCol + i > 9) { // Check if out of bounds
 				break;
-			} else if(board.board[queenRow][queenCol + i] != null) { // Check if the cell is occupied
+			} else if(board.boardState[queenRow][queenCol + i] != null) { // Check if the cell is occupied
 				break;
 			}
 			move = new ArrayList<>();
@@ -75,7 +75,7 @@ public class Actions {
 		for(int i=1; i<10; ++i) {
 			if(queenRow - i < 0 || queenCol - i < 0) { // Check if out of bounds
 				break;
-			} else if(board.board[queenRow - i][queenCol - i] != null) { // Check if the cell is occupied
+			} else if(board.boardState[queenRow - i][queenCol - i] != null) { // Check if the cell is occupied
 				break;
 			}
 			move = new ArrayList<>();
@@ -88,7 +88,7 @@ public class Actions {
 		for(int i=1; i<10; ++i) {
 			if(queenRow - i < 0 || queenCol + i > 9) { // Check if out of bounds
 				break;
-			} else if(board.board[queenRow - i][queenCol + i] != null) { // Check if the cell is occupied
+			} else if(board.boardState[queenRow - i][queenCol + i] != null) { // Check if the cell is occupied
 				break;
 			}
 			move = new ArrayList<>();
@@ -101,7 +101,7 @@ public class Actions {
 		for(int i=1; i<10; ++i) {
 			if(queenRow + i > 9 || queenCol - i < 0) { // Check if out of bounds
 				break;
-			} else if(board.board[queenRow + i][queenCol - i] != null) { // Check if the cell is occupied
+			} else if(board.boardState[queenRow + i][queenCol - i] != null) { // Check if the cell is occupied
 				break;
 			}
 			move = new ArrayList<>();
@@ -114,7 +114,7 @@ public class Actions {
 		for(int i=1; i<10; ++i) {
 			if(queenRow + i > 9 || queenCol + i > 9) { // Check if out of bounds
 				break;
-			} else if(board.board[queenRow + i][queenCol + i] != null) { // Check if the cell is occupied
+			} else if(board.boardState[queenRow + i][queenCol + i] != null) { // Check if the cell is occupied
 				break;
 			}
 			move = new ArrayList<>();
@@ -146,7 +146,7 @@ public class Actions {
 		for(int i=1; i<10; ++i) {
 			if(queenRow - i < 0) { // Check if out of bounds
 				break;
-			} else if(board.board[queenRow - i][queenCol] != null) { // Check if the cell is occupied
+			} else if(board.boardState[queenRow - i][queenCol] != null) { // Check if the cell is occupied
 				break;
 			}
 			move = new ArrayList<>();
@@ -160,7 +160,7 @@ public class Actions {
 			if(queenRow + i > 9) { // Check if out of bounds
 				break;
 			}
-			else if(board.board[queenRow + i][queenCol] != null) { // Check if the cell is occupied
+			else if(board.boardState[queenRow + i][queenCol] != null) { // Check if the cell is occupied
 				break;
 			}
 			move = new ArrayList<>();
@@ -173,7 +173,7 @@ public class Actions {
 		for(int i=1; i<10; ++i) {
 			if(queenCol - i < 0) { // Check if out of bounds
 				break;
-			} else if(board.board[queenRow][queenCol - i] != null) { // Check if the cell is occupied
+			} else if(board.boardState[queenRow][queenCol - i] != null) { // Check if the cell is occupied
 				break;
 			}
 			move = new ArrayList<>();
@@ -186,7 +186,7 @@ public class Actions {
 		for(int i=1; i<10; ++i) {
 			if(queenCol + i > 9) { // Check if out of bounds
 				break;
-			} else if(board.board[queenRow][queenCol + i] != null) { // Check if the cell is occupied
+			} else if(board.boardState[queenRow][queenCol + i] != null) { // Check if the cell is occupied
 				break;
 			}
 			move = new ArrayList<>();
@@ -199,7 +199,7 @@ public class Actions {
 		for(int i=1; i<10; ++i) {
 			if(queenRow - i < 0 || queenCol - i < 0) { // Check if out of bounds
 				break;
-			} else if(board.board[queenRow - i][queenCol - i] != null) { // Check if the cell is occupied
+			} else if(board.boardState[queenRow - i][queenCol - i] != null) { // Check if the cell is occupied
 				break;
 			}
 			move = new ArrayList<>();
@@ -212,7 +212,7 @@ public class Actions {
 		for(int i=1; i<10; ++i) {
 			if(queenRow - i < 0 || queenCol + i > 9) { // Check if out of bounds
 				break;
-			} else if(board.board[queenRow - i][queenCol + i] != null) { // Check if the cell is occupied
+			} else if(board.boardState[queenRow - i][queenCol + i] != null) { // Check if the cell is occupied
 				break;
 			}
 			move = new ArrayList<>();
@@ -225,7 +225,7 @@ public class Actions {
 		for(int i=1; i<10; ++i) {
 			if(queenRow + i > 9 || queenCol - i < 0) { // Check if out of bounds
 				break;
-			} else if(board.board[queenRow + i][queenCol - i] != null) { // Check if the cell is occupied
+			} else if(board.boardState[queenRow + i][queenCol - i] != null) { // Check if the cell is occupied
 				break;
 			}
 			move = new ArrayList<>();
@@ -238,7 +238,7 @@ public class Actions {
 		for(int i=1; i<10; ++i) {
 			if(queenRow + i > 9 || queenCol + i > 9) { // Check if out of bounds
 				break;
-			} else if(board.board[queenRow + i][queenCol + i] != null) { // Check if the cell is occupied
+			} else if(board.boardState[queenRow + i][queenCol + i] != null) { // Check if the cell is occupied
 				break;
 			}
 			move = new ArrayList<>();
