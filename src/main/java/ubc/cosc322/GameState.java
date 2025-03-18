@@ -106,4 +106,17 @@ public class GameState {
         }
         return validMoves;
     }
+
+    public int[][] getBoardState() {
+        return this.board;
+    }
+
+    public List<Queens> getPlayerQueens(int player) {
+        List<Queens> queens = new ArrayList<>();
+        List<int[]> positions = (player == PLAYER1) ? player1Positions : player2Positions;
+        for (int[] pos : positions) {
+            queens.add(new Queens(pos[0], pos[1], player == PLAYER2));
+        }
+        return queens;
+    }
 }
