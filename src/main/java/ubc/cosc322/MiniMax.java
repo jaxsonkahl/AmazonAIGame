@@ -61,6 +61,7 @@ public class MiniMax {
             route.add(tmp);
             tmp = tmp.getParent();
         }
+        checkAndPrintWinner(tmp);
         return route;
     }
 
@@ -78,6 +79,7 @@ public class MiniMax {
             // Check if the game is over
             if(currentNode.getChildren().get(i).getGameOver() == 1){
                 optimalNode = currentNode.getChildren().get(i);
+                System.out.println("Game Over");
                 break;
             } else if(optimalNode.getBoardState().evaluateBoard() + num < currentNode.getChildren().get(i).getBoardState().evaluateBoard() + value){
                 optimalNode = currentNode.getChildren().get(i);
@@ -85,5 +87,17 @@ public class MiniMax {
             }
         }
         return optimalNode;
+    }
+
+    // Method to check and print the winner
+    public void checkAndPrintWinner(Node currentNode) {
+        int gameOverStatus = currentNode.getBoardState().gameOverCheck(currentNode.getOpponent());
+        if (gameOverStatus == 1) {
+            System.out.println("Opponent is out of moves. You win!");
+        } else if (gameOverStatus == 0) {
+            System.out.println("You are out of moves. You lose!");
+        } else {
+            System.out.println("The game is still ongoing.");
+        }
     }
 }
