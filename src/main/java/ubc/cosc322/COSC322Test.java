@@ -1,17 +1,14 @@
 package ubc.cosc322;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
-import sfs2x.client.entities.Room;
 import ygraph.ai.smartfox.games.BaseGameGUI;
 import ygraph.ai.smartfox.games.GameClient;
 import ygraph.ai.smartfox.games.GameMessage;
 import ygraph.ai.smartfox.games.GamePlayer;
 import ygraph.ai.smartfox.games.amazons.AmazonsGameMessage;
-import ygraph.ai.smartfox.games.amazons.HumanPlayer;
 
 /**
  * An example illustrating how to implement a GamePlayer
@@ -37,7 +34,7 @@ public class COSC322Test extends GamePlayer{
      * @param args for name and passwd (current, any string would work)
      */
     public static void main(String[] args) {				 
-    	COSC322Test player = new COSC322Test("1", "2");
+    	COSC322Test player = new COSC322Test("a", "b");
     	//HumanPlayer player = new HumanPlayer();
     	
     	if(player.getGameGUI() == null) {
