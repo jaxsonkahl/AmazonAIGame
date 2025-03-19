@@ -123,25 +123,34 @@ public class BoardState {
         ArrayList<Integer> queenNewPos;
         ArrayList<Integer> arrowPos;
         if(enemy) {
+            // Check if the game is over for the enemy
             if(this.gameOverCheck(true) != 1) {
+                // Get all possible actions for each enemy queen
                 for(Queens queen: this.enemy) {
                     queen.actions.getActions(this,queen);
                 }
+                // Select a random enemy queen with available moves
                 current = this.enemy[(int) (Math.random()*4)];
                 while(current.actions.moves.size()==0) {
                     current = this.enemy[(int) (Math.random()*4)];
                 }
+                // Select a random move for the selected queen
                 ArrayList<Integer> action = current.actions.moves.get((int) (Math.random()*current.actions.moves.size()));
                 queenPrevPos = new ArrayList<Integer>();
                 queenPrevPos.add(current.getRow()+1); queenPrevPos.add(current.getColumn()+1);
                 queenNewPos = new ArrayList<Integer>();
                 queenNewPos.add(current.getRow()+action.get(0)+1); queenNewPos.add(current.getColumn()+action.get(1)+1);
+                // Update the board with the new queen position
                 updateBoard(queenPrevPos, queenNewPos);
+                // Get all possible arrow shots for the selected queen
                 current.actions.availableArrows(this, current);
+                // Select a random arrow shot
                 ArrayList<Integer> arrowShot = current.actions.arrowShots.get((int) (Math.random()*current.actions.arrowShots.size()));
                 arrowPos = new ArrayList<Integer>();
                 arrowPos.add(current.getRow()+arrowShot.get(0)+1); arrowPos.add(current.getColumn()+arrowShot.get(1)+1);
+                // Update the board with the new arrow position
                 updateBoard(arrowPos);
+                // Store the move
                 makeMove = new ArrayList<>();
                 makeMove.add(queenPrevPos); 
                 makeMove.add(queenNewPos); 
@@ -150,30 +159,40 @@ public class BoardState {
             }
         }
         else {
+            // Check if the game is over for the player
             if(this.gameOverCheck(false) != 0) {
+                // Get all possible actions for each player queen
                 for(Queens queen: this.player) {
                     queen.actions.getActions(this,queen);
                 }
+                // Select a random player queen with available moves
                 current = this.player[(int) (Math.random()*4)];
                 while(current.actions.moves.size()==0) {
                     current = this.player[(int) (Math.random()*4)];
                 }
+                // Select a random move for the selected queen
                 ArrayList<Integer> action = current.actions.moves.get((int) (Math.random()*current.actions.moves.size()));
                 queenPrevPos = new ArrayList<Integer>();
                 queenPrevPos.add(current.getRow()+1); queenPrevPos.add(current.getColumn()+1);
                 queenNewPos = new ArrayList<Integer>();
                 queenNewPos.add(current.getRow()+action.get(0)+1); queenNewPos.add(current.getColumn()+action.get(1)+1);
+                // Update the board with the new queen position
                 updateBoard(queenPrevPos, queenNewPos);
+                // Get all possible arrow shots for the selected queen
                 current.actions.availableArrows(this, current);
+                // Select the optimal arrow shot
                 ArrayList<Integer> arrowShot = current.selectOptimalShot(this);
                 arrowPos = new ArrayList<Integer>();
                 arrowPos.add(current.getRow()+arrowShot.get(0)+1); arrowPos.add(current.getColumn()+arrowShot.get(1)+1);
+                // Update the board with the new arrow position
                 updateBoard(arrowPos);
+                // Store the move
                 makeMove = new ArrayList<>();
                 makeMove.add(queenPrevPos); makeMove.add(queenNewPos); makeMove.add(arrowPos);
                 return makeMove;
             }
         }
+        // If no move is possible, return null moves
         makeMove = new ArrayList<>();
         makeMove.add(null); 
         makeMove.add(null); 
@@ -184,33 +203,39 @@ public class BoardState {
     // Check if the game is over
     public int gameOverCheck(boolean opponent) {
         if(opponent) {
+            // Get all possible actions for each enemy queen
             for(Queens queen: this.enemy) {
                 queen.actions.getActions(this,queen);
             }
+            // Check if all enemy queens have no available moves
             if(this.enemy[0].actions.moves.size() == 0 && this.enemy[1].actions.moves.size() == 0 
             && this.enemy[2].actions.moves.size() == 0 && this.enemy[3].actions.moves.size() == 0) {
-                return 1;
+                return 1; // Enemy loses
             }
         }
         else {
+            // Get all possible actions for each player queen
             for(Queens queen: this.player) {
                 queen.actions.getActions(this,queen);
             }
+            // Check if all player queens have no available moves
             if(this.player[0].actions.moves.size() == 0 && this.player[1].actions.moves.size() == 0 
             && this.player[2].actions.moves.size() == 0 && this.player[3].actions.moves.size() == 0) {
-                return 0;
+                return 0; // Player loses
             }
         }
-        return -1;
+        return -1; // Game is not over
     }
 
     // Evaluate the board and return a score
     public int evaluateBoard() {
         int score = 0;
+        // Calculate score based on the number of available moves for each player queen
         for(int i = 0; i < player.length; i ++) {
             player[i].actions.getActions(this, player[i]);
             score += player[i].actions.moves.size();
         }
+        // Subtract score based on the number of available moves for each enemy queen
         for(int i = 0; i < enemy.length; i ++) {
             enemy[i].actions.getActions(this, enemy[i]);
             score -= enemy[i].actions.moves.size();
@@ -221,36 +246,36 @@ public class BoardState {
     // Check if any player's queen is in danger
     public boolean inDanger() {
         for(int i=0; i<player.length; i++) {
-            //see cells around player[i] to check if it is in danger. 
+            // See cells around player[i] to check if it is in danger
             int queenRow = player[i].getRow();
             int queenCol = player[i].getColumn();
             
-            //make a list of emptyPostions
+            // Make a list of empty positions
             ArrayList<Tiles> emptyPositions = new ArrayList<>();
-            //checks bottom 3 tiles
+            // Checks bottom 3 tiles
             for(int j=-1; j<1; j++) {
                 if(queenRow+1 < 10 && queenCol+j >= 0 && queenCol+j < 10 &&
                     boardState[queenRow+1][queenCol+j] == null) {
                     emptyPositions.add(new Tiles(queenRow+1,queenCol+j));
                 }
             }
-            //checks top 3 tiles
+            // Checks top 3 tiles
             for(int j=-1; j<1; j++) {
                 if(queenRow-1 >= 0 && queenCol+j >= 0 && queenCol+j < 10 &&
                     boardState[queenRow-1][queenCol+j] == null) {
                     emptyPositions.add(new Tiles(queenRow-1,queenCol+j));
                 }
             }
-            //checks right tile
+            // Checks right tile
             if(queenCol+1 < 10 && boardState[queenRow][queenCol+1] == null) {
                 emptyPositions.add(new Tiles(queenRow,queenCol+1));
             }
-            //checks left tile
+            // Checks left tile
             if(queenCol-1 >= 0 && boardState[queenRow][queenCol-1] == null) {
                 emptyPositions.add(new Tiles(queenRow,queenCol-1));
             }
             
-            //check if its below two
+            // Check if the queen is surrounded by one or two empty positions
             if (emptyPositions.size() == 1) {
                 return true;
             }else if (emptyPositions.size() == 2) {
