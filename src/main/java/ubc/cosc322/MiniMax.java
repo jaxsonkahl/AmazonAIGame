@@ -6,7 +6,7 @@ public class MiniMax {
     private int depth; // Depth of the tree
 
     // Constructor to create a MiniMax tree with a root node and depth
-    public MiniMax(Node rootNode, int depth){
+    public MiniMax(Node rootNode){
         this.rootNode = rootNode;
         this.depth = 0;
     }
