@@ -1,15 +1,17 @@
-
 package ubc.cosc322;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 
 import sfs2x.client.entities.Room;
 import ygraph.ai.smartfox.games.BaseGameGUI;
 import ygraph.ai.smartfox.games.GameClient;
 import ygraph.ai.smartfox.games.GameMessage;
 import ygraph.ai.smartfox.games.GamePlayer;
+import ygraph.ai.smartfox.games.amazons.AmazonsGameMessage;
+import ygraph.ai.smartfox.games.amazons.HumanPlayer;
 
 /**
  * An example illustrating how to implement a GamePlayer
@@ -24,36 +26,41 @@ public class COSC322Test extends GamePlayer{
 	
     private String userName = null;
     private String passwd = null;
-     
-      
-        /**
-         * The main method
-         * @param args for name and passwd (current, any string would work)
-         */
-        public static void main(String[] args) {				 
-          COSC322Test player = new COSC322Test("cosc322", "cosc322");
-          
-          if(player.getGameGUI() == null) {
-            player.Go();
-          }
-          else {
-            BaseGameGUI.sys_setup();
-                java.awt.EventQueue.invokeLater(new Runnable() {
-                    public void run() {
-                      player.Go();
-                    }
-                });
-          }
-        }
-      
-        /**
-         * Any name and passwd 
-         * @param userName
-         * @param passwd
-         */
-        public COSC322Test(String userName, String passwd) {
-          this.userName = userName;
-          this.passwd = passwd;
+    private MiniMax tree;
+    private Node node;
+    private int toDepth = 2;
+    private Stack<Node> path = null;
+ 
+	
+    /**
+     * The main method
+     * @param args for name and passwd (current, any string would work)
+     */
+    public static void main(String[] args) {				 
+    	COSC322Test player = new COSC322Test("1", "2");
+    	//HumanPlayer player = new HumanPlayer();
+    	
+    	if(player.getGameGUI() == null) {
+    		player.Go();
+    	}
+    	else {
+    		BaseGameGUI.sys_setup();
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                public void run() {
+                	player.Go();
+                }
+            });
+    	}
+    }
+	
+    /**
+     * Any name and passwd 
+     * @param userName
+     * @param passwd
+     */
+    public COSC322Test(String userName, String passwd) {
+    	this.userName = userName;
+    	this.passwd = passwd;
     	
     	//To make a GUI-based player, create an instance of BaseGameGUI
     	//and implement the method getGameGUI() accordingly
@@ -64,30 +71,133 @@ public class COSC322Test extends GamePlayer{
 
     @Override
     public void onLogin() {
-		System.out.println("Congratualations!!! "
-                + "I am called because the server indicated that the login is successfully");
-        System.out.println("The next step is to find a room and join it: "
-                + "the gameClient instance created in my constructor knows how!"); 
-        List<Room> rooms  = gameClient.getRoomList();
-        for(Room r: rooms){
-            System.out.println(r.getName());
-        }
-        System.out.println("Joining " + rooms.get(1).getName());
-        gameClient.joinRoom(rooms.get(1).getName());
-		
-		userName = gameClient.getUserName();
-      if(gamegui != null) {
-        gamegui.setRoomInformation(gameClient.getRoomList());
-      }
+    	System.out.println("Congratualations!!! "
+    			+ "I am called because the server indicated that the login is successfully");
+    	System.out.println("The next step is to find a room and join it: "
+    			+ "the gameClient instance created in my constructor knows how!");
+    	
+    	/*
+    	List<Room> rooms = gameClient.getRoomList();
+    	for(Room room: rooms) {System.out.print(room.getName() + " ");}
+    	System.out.println();
+    	int roomIndex = (int) Math.random(rooms.size());
+    	gameClient.joinRoom(rooms.get(roomIndex).getName());
+    	System.out.print("You have successfully joined room " + roomIndex + ".");
+    	*/
+    	
+    	userName = gameClient.getUserName();
+    	if(gamegui != null) {
+    		gamegui.setRoomInformation(gameClient.getRoomList());
+    	}
     }
 
     @Override
     public boolean handleGameMessage(String messageType, Map<String, Object> msgDetails) {
-      if (messageType.equals(GameMessage.GAME_STATE_BOARD)){
-        ArrayList <Integer> gameState =(ArrayList <Integer>) msgDetails.get("game-state");
-        gamegui.setGameState(gameState);
-      }
-		return true;  
+    	//This method will be called by the GameClient when it receives a game-related message
+    	//from the server.
+    	//For a detailed description of the message types and format, 
+    	//see the method GamePlayer.handleGameMessage() in the game-client-api document.
+    	
+    	System.out.println(msgDetails.get(messageType));
+    	switch(messageType) {
+    	case GameMessage.GAME_STATE_BOARD:
+    		gamegui.setGameState((ArrayList<Integer>) msgDetails.get("game-state"));
+    		break;
+    	case GameMessage.GAME_ACTION_START:
+    		if(msgDetails.get(AmazonsGameMessage.PLAYER_BLACK).equals(this.userName)) {
+    			System.out.println("White: " + msgDetails.get(AmazonsGameMessage.PLAYER_WHITE));
+    			System.out.println("Black: " + this.userName);
+    			node = new Node(new BoardState(true),false);
+    			tree = new MiniMax(node);
+    			handleGamemovestart();
+    		}
+    		else {
+    			System.out.println("White: " + this.userName);
+    			System.out.println("Black: " + msgDetails.get(AmazonsGameMessage.PLAYER_BLACK));
+    			node = new Node(new BoardState(false),true);
+    			tree = new MiniMax(node);
+    		}
+    		break;
+    	case GameMessage.GAME_ACTION_MOVE:
+    		try {
+    			gamegui.updateGameState(msgDetails);
+				handleGameActionMove(msgDetails);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+    		break;
+    	}
+    	
+    	return true;
+    }
+    
+    public void handleGamemovestart() {
+    	Node child = new Node(new BoardState(node.getBoardState(),false),false);
+    	ArrayList<ArrayList<Integer>> makeMove = child.getBoardState().randomMove(false);
+		  tree.addChild(node, child);
+        node = child;
+        ArrayList<Integer> queenPrevPos = node.getBoardState().makeMove.get(0);
+        ArrayList<Integer> queenNewPos = node.getBoardState().makeMove.get(1);
+        ArrayList<Integer> arrPos = node.getBoardState().makeMove.get(2);
+        gameClient.sendMoveMessage(queenPrevPos,queenNewPos,arrPos);
+        gamegui.updateGameState(queenPrevPos, queenNewPos, arrPos);
+        System.out.println("Ally: Queen from [" + queenPrevPos.get(0) + ", " + queenPrevPos.get(1) +"]"
+        		+ " to ["+ queenNewPos.get(0) + ", " + queenNewPos.get(1) +"]");
+    }
+    
+    public void handleGameActionMove(Map<String, Object> msgDetails) {
+    	// opponent's Move
+    	
+    	ArrayList<Integer> queenPrevPos = (ArrayList<Integer>) msgDetails.get(AmazonsGameMessage.QUEEN_POS_CURR);
+        ArrayList<Integer> queenNewPos = (ArrayList<Integer>) msgDetails.get(AmazonsGameMessage.QUEEN_POS_NEXT);
+        ArrayList<Integer> arrPos = (ArrayList<Integer>) msgDetails.get(AmazonsGameMessage.ARROW_POS);
+        Node child = new Node(new BoardState(node.getBoardState(),true),true);
+        System.out.println("Enemy: Queen from [" + queenPrevPos.get(0) + ", " + queenPrevPos.get(1) +"]"
+        		+ " to ["+ queenNewPos.get(0) + ", " + queenNewPos.get(1) +"]");
+        child.getBoardState().updateBoard(queenPrevPos, queenNewPos, arrPos);
+        //child.getBoard().printBoard();
+        tree.addChild(node, child);
+    	node=child;
+    	if(node.getBoardState().gameOverCheck(true) == 0) {
+    		System.out.println("You are out of moves. You lose!");
+    		return;
+    	}
+    	if(node.getBoardState().gameOverCheck(false) == 1) {
+    		System.out.println("Your opponent is out of moves. You win!");
+    		return;
+    	}
+    	
+        // our move
+        System.out.println("-----------------------------------------------------------------");
+        for(Queens queen: node.getBoardState().player) {
+        	queen.actions.getActions(child.getBoardState(), queen);
+        }
+        for(Queens queen: node.getBoardState().enemy) {
+        	queen.actions.getActions(child.getBoardState(), queen);
+        }
+        if(node.getChildren().size() == 0) {
+        	tree.expand(node, toDepth);
+        }
+        path = tree.searchRoute(node);
+    	path.size();
+        node = path.pop();
+        queenPrevPos = node.getBoardState().makeMove.get(0);
+        queenNewPos = node.getBoardState().makeMove.get(1);
+        arrPos = node.getBoardState().makeMove.get(2);
+        System.out.println("Ally: Queen from [" + queenPrevPos.get(0) + ", " + queenPrevPos.get(1) +"]"
+        		+ " to ["+ queenNewPos.get(0) + ", " + queenNewPos.get(1) +"]");
+        System.out.println(node.getBoardState().current);
+        gameClient.sendMoveMessage(queenPrevPos,queenNewPos,arrPos);
+        gamegui.updateGameState(queenPrevPos, queenNewPos, arrPos);
+        //node.getBoard().printBoard();
+        if(node.getBoardState().gameOverCheck(false) == 1) {
+    		System.out.println("Your opponent is out of makeMoves. You win!");
+    		return;
+    	}
+        if(node.getBoardState().gameOverCheck(true) == 0) {
+    		System.out.println("You are out of makeMoves. You lose!");
+    		return;
+    	}
     }
     
     
@@ -105,7 +215,7 @@ public class COSC322Test extends GamePlayer{
 	@Override
 	public BaseGameGUI getGameGUI() {
 		// TODO Auto-generated method stub
-		return this.gamegui;
+		return  this.gamegui;
 	}
 
 	@Override
@@ -114,4 +224,5 @@ public class COSC322Test extends GamePlayer{
     	gameClient = new GameClient(userName, passwd, this);			
 	}
 
-}//end of class
+ 
+}
