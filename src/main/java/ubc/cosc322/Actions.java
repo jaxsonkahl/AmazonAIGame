@@ -1,250 +1,153 @@
 package ubc.cosc322;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Actions {
-	List<ArrayList<Integer>> moves;
-	List<ArrayList<Integer>> arrowShots;
-	
-	public Actions() {
-		this.moves = new ArrayList<ArrayList<Integer>>();
-		this.arrowShots = new ArrayList<ArrayList<Integer>>();
+	public int queenSpotX;
+	public int queenSpotY;
+	public int queenDestinationX;
+	public int queenDestinationY;
+	public int arrowDestinationX;
+	public int arrowDestinationY;
+
+	public Actions(int queenSpotX, int queenSpotY, int queenDestinationX, int queenDestinationY, int arrowDestinationX, int arrowDestinationY) {
+		this.queenSpotX = queenSpotX;
+		this.queenSpotY = queenSpotY;
+		this.queenDestinationX = queenDestinationX;
+		this.queenDestinationY = queenDestinationY;
+		this.arrowDestinationX = arrowDestinationX;
+		this.arrowDestinationY = arrowDestinationY;
 	}
 
-	// Method to get all possible moves for a given queen
-	public void getActions(BoardState board, Queens queen) { // waiting for BoardState Implementation
-		moves = new ArrayList<ArrayList<Integer>>();
-		int queenRow = queen.getRow();
-		int queenCol = queen.getColumn();
-		ArrayList<Integer> move;
+	public static int[][][] performAction(Actions action, int[][][] boardState){
+		int[][] board = boardState[0];
+		int[][] actionMap = boardState[1];
+		int[][] updateBoard = new int[10][10];
+		int[][] updateActionMap = new int[10][10];
 
-		// QUEEN MOVING UP
-		for(int i=1; i<10; ++i) {
-			if(queenRow - i < 0) { // Check if out of bounds
-				break;
-			} else if(board.boardState[queenRow - i][queenCol] != null) { // Check if the cell is occupied
-				break;
+		for(int i =0; i <10; i++){
+			for(int j = 0; j < 10; j++){
+				updateBoard[i][j] = board[i][j];
+				updateActionMap[i][j] = actionMap[i][j];
 			}
-			move = new ArrayList<>();
-			move.add(-i);
-			move.add(0);
-			moves.add(move);
 		}
 
-		// QUEEN MOVING DOWN
-		for(int i=1; i<10; ++i) {
-			if(queenRow + i > 9) { // Check if out of bounds
-				break;
-			} else if(board.boardState[queenRow + i][queenCol] != null) { // Check if the cell is occupied
-				break;
-			}
-			move = new ArrayList<>();
-			move.add(i);
-			move.add(0);
-			moves.add(move);
+		updateBoard[action.queenDestinationY][action.queenDestinationX] = board[action.queenSpotY][action.queenSpotX];
+		updateBoard[action.queenSpotY][action.queenSpotX] = 0;
+		updateBoard[action.arrowDestinationY][action.arrowDestinationX] = 3;
+
+		if(Utility.validSpot(action.queenSpotY-1, action.queenSpotX)) {
+			updateActionMap[action.queenSpotY-1][action.queenSpotX]++;
+		}
+		if(Utility.validSpot(action.queenSpotX-1, action.queenSpotX-1)) {
+			updateActionMap[action.queenSpotY-1][action.queenSpotX-1]++;
 		}
 
-		// QUEEN MOVING LEFT
-		for(int i=1; i<10; ++i) {
-			if(queenCol - i < 0) { // Check if out of bounds
-				break;
-			} else if(board.boardState[queenRow][queenCol - i] != null) { // Check if the cell is occupied
-				break;
-			}
-			move = new ArrayList<>();
-			move.add(0);
-			move.add(-i);
-			moves.add(move);
+		if(Utility.validSpot(action.queenSpotY-1, action.queenSpotX+1)) {
+			updateActionMap[action.queenSpotY-1][action.queenSpotX+1]++;
+		}
+		if(Utility.validSpot(action.queenSpotY, action.queenSpotX-1)) {
+			updateActionMap[action.queenSpotY][action.queenSpotX-1]++;
+		}
+		if(Utility.validSpot(action.queenSpotY, action.queenSpotX+1)) {
+			updateActionMap[action.queenSpotY][action.queenSpotX+1]++;
+		}
+		if(Utility.validSpot(action.queenSpotY+1, action.queenSpotX)) {
+			updateActionMap[action.queenSpotY+1][action.queenSpotX]++;
+		}
+		if(Utility.validSpot(action.queenSpotY+1, action.queenSpotX-1)) {
+			updateActionMap[action.queenSpotY+1][action.queenSpotX-1]++;
+		}
+		if(Utility.validSpot(action.queenSpotY+1, action.queenSpotX+1)) {
+			updateActionMap[action.queenSpotY+1][action.queenSpotX+1]++;
 		}
 
-		// QUEEN MOVING RIGHT
-		for(int i=1; i<10; ++i) {
-			if(queenCol + i > 9) { // Check if out of bounds
-				break;
-			} else if(board.boardState[queenRow][queenCol + i] != null) { // Check if the cell is occupied
-				break;
-			}
-			move = new ArrayList<>();
-			move.add(0);
-			move.add(i);
-			moves.add(move);
+
+
+
+
+		if(Utility.validSpot(action.queenDestinationY-1, action.queenDestinationX)) {
+			updateActionMap[action.queenDestinationY-1][action.queenDestinationX]--;
+		}
+		if(Utility.validSpot(action.queenDestinationY-1, action.queenDestinationX-1)) {
+			updateActionMap[action.queenDestinationY-1][action.queenDestinationX-1]--;
+		}
+		if(Utility.validSpot(action.queenDestinationY-1, action.queenDestinationX+1)) {
+			updateActionMap[action.queenDestinationY-1][action.queenDestinationX+1]--;
+		}
+		if(Utility.validSpot(action.queenDestinationY, action.queenDestinationX-1)) {
+			updateActionMap[action.queenDestinationY][action.queenDestinationX-1]--;
+		}
+		if(Utility.validSpot(action.queenDestinationY, action.queenDestinationX+1)) {
+			updateActionMap[action.queenDestinationY][action.queenDestinationX+1]--;
+		}
+		if(Utility.validSpot(action.queenDestinationY+1, action.queenDestinationX)) {
+			updateActionMap[action.queenDestinationY+1][action.queenDestinationX]--;
+		}
+		if(Utility.validSpot(action.queenDestinationY+1, action.queenDestinationX-1)) {
+			updateActionMap[action.queenDestinationY+1][action.queenDestinationX-1]--;
+		}
+		if(Utility.validSpot(action.queenDestinationY+1, action.queenDestinationX+1)) {
+			updateActionMap[action.queenDestinationY+1][action.queenDestinationX+1]--;
 		}
 		
-		// QUEEN MOVING UP AND LEFT
-		for(int i=1; i<10; ++i) {
-			if(queenRow - i < 0 || queenCol - i < 0) { // Check if out of bounds
-				break;
-			} else if(board.boardState[queenRow - i][queenCol - i] != null) { // Check if the cell is occupied
-				break;
-			}
-			move = new ArrayList<>();
-			move.add(-i);
-			move.add(-i);
-			moves.add(move);
+
+
+		if(Utility.validSpot(action.arrowDestinationY-1, action.arrowDestinationX)) {
+			updateActionMap[action.arrowDestinationY-1][action.arrowDestinationX]--;
+		}
+		if(Utility.validSpot(action.arrowDestinationY-1, action.arrowDestinationX-1)) {
+			updateActionMap[action.arrowDestinationY-1][action.arrowDestinationX-1]--;
+		}
+		if(Utility.validSpot(action.arrowDestinationY-1, action.arrowDestinationX+1)) {
+			updateActionMap[action.arrowDestinationY-1][action.arrowDestinationX+1]--;
+		}
+		if(Utility.validSpot(action.arrowDestinationY, action.arrowDestinationX-1)) {
+			updateActionMap[action.arrowDestinationY][action.arrowDestinationX-1]--;
+		}
+		if(Utility.validSpot(action.arrowDestinationY, action.arrowDestinationX+1)) {
+			updateActionMap[action.arrowDestinationY][action.arrowDestinationX+1]--;
+		}
+		if(Utility.validSpot(action.arrowDestinationY+1, action.arrowDestinationX)) {
+			updateActionMap[action.arrowDestinationY+1][action.arrowDestinationX]--;
+		}
+		if(Utility.validSpot(action.arrowDestinationY+1, action.arrowDestinationX-1)) {
+			updateActionMap[action.arrowDestinationY+1][action.arrowDestinationX-1]--;
+		}
+		if(Utility.validSpot(action.arrowDestinationY+1, action.arrowDestinationX+1)) {
+			updateActionMap[action.arrowDestinationY+1][action.arrowDestinationX+1]--;
 		}
 
-		// QUEEN MOVING UP AND RIGHT
-		for(int i=1; i<10; ++i) {
-			if(queenRow - i < 0 || queenCol + i > 9) { // Check if out of bounds
-				break;
-			} else if(board.boardState[queenRow - i][queenCol + i] != null) { // Check if the cell is occupied
-				break;
-			}
-			move = new ArrayList<>();
-			move.add(-i);
-			move.add(i);
-			moves.add(move);
-		}
-
-		// QUEEN MOVING DOWN AND LEFT
-		for(int i=1; i<10; ++i) {
-			if(queenRow + i > 9 || queenCol - i < 0) { // Check if out of bounds
-				break;
-			} else if(board.boardState[queenRow + i][queenCol - i] != null) { // Check if the cell is occupied
-				break;
-			}
-			move = new ArrayList<>();
-			move.add(i);
-			move.add(-i);
-			moves.add(move);
-		}
-
-		// QUEEN MOVING DOWN AND RIGHT
-		for(int i=1; i<10; ++i) {
-			if(queenRow + i > 9 || queenCol + i > 9) { // Check if out of bounds
-				break;
-			} else if(board.boardState[queenRow + i][queenCol + i] != null) { // Check if the cell is occupied
-				break;
-			}
-			move = new ArrayList<>();
-			move.add(i);
-			move.add(i);
-			moves.add(move);
-		}
+		return new int[][][]{updateBoard, updateActionMap};
 	}
 
-	// Method to check if a queen can escape
-	public boolean escape(BoardState board, Queens queen) { // waiting for BoardState Implementation
-		for(int i=0;i<board.player.length;i++) {
-			int numofmove = moves.size();
-			if(numofmove <2) { // If the number of moves is less than 2, the queen can escape
-				return true;
+	public static int[][] performQueenMove(int queenSpotX, int queenSpotY, int queenDestinationX, int queenDestinationY, int [][][] boardState){
+		int[][] board = boardState[0];
+		int[][] updateBoard = new int[10][10];
+
+		for(int i = 0; i < 10; i++){
+			for(int j = 0; j <10; j++){
+				updateBoard[i][j] = board[i][j];
 			}
-			
-		} return false;
+		}
+
+		updateBoard[queenDestinationY][queenDestinationX] = board[queenSpotY][queenSpotX];
+		updateBoard[queenSpotY][queenSpotX] = 0;
+		return updateBoard;
 	}
 
-	// Method to get all possible arrow shots for a given queen
-	public void availableArrows(BoardState board, Queens queen) { // waiting for BoardState Implementation
-		arrowShots = new ArrayList<ArrayList<Integer>>();
-		int queenRow = queen.getRow();
-		int queenCol = queen.getColumn();
-		ArrayList<Integer> move;
-
-		// SHOOT ARROW UP
-		for(int i=1; i<10; ++i) {
-			if(queenRow - i < 0) { // Check if out of bounds
-				break;
-			} else if(board.boardState[queenRow - i][queenCol] != null) { // Check if the cell is occupied
-				break;
-			}
-			move = new ArrayList<>();
-			move.add(-i);
-			move.add(0);
-			arrowShots.add(move);
-		}
-
-		// SHOOT ARROW DOWN
-		for(int i=1; i<10; ++i) {
-			if(queenRow + i > 9) { // Check if out of bounds
-				break;
-			}
-			else if(board.boardState[queenRow + i][queenCol] != null) { // Check if the cell is occupied
-				break;
-			}
-			move = new ArrayList<>();
-			move.add(i);
-			move.add(0);
-			arrowShots.add(move);
-		}
-
-		// SHOOT ARROW LEFT
-		for(int i=1; i<10; ++i) {
-			if(queenCol - i < 0) { // Check if out of bounds
-				break;
-			} else if(board.boardState[queenRow][queenCol - i] != null) { // Check if the cell is occupied
-				break;
-			}
-			move = new ArrayList<>();
-			move.add(0);
-			move.add(-i);
-			arrowShots.add(move);
-		}
-
-		// SHOOT ARROW RIGHT
-		for(int i=1; i<10; ++i) {
-			if(queenCol + i > 9) { // Check if out of bounds
-				break;
-			} else if(board.boardState[queenRow][queenCol + i] != null) { // Check if the cell is occupied
-				break;
-			}
-			move = new ArrayList<>();
-			move.add(0);
-			move.add(i);
-			arrowShots.add(move);
-		}
-
-		// SHOOT ARROW LEFT AND UP
-		for(int i=1; i<10; ++i) {
-			if(queenRow - i < 0 || queenCol - i < 0) { // Check if out of bounds
-				break;
-			} else if(board.boardState[queenRow - i][queenCol - i] != null) { // Check if the cell is occupied
-				break;
-			}
-			move = new ArrayList<>();
-			move.add(-i);
-			move.add(-i);
-			arrowShots.add(move);
-		}
-
-		// SHOOT ARROW RIGHT AND UP
-		for(int i=1; i<10; ++i) {
-			if(queenRow - i < 0 || queenCol + i > 9) { // Check if out of bounds
-				break;
-			} else if(board.boardState[queenRow - i][queenCol + i] != null) { // Check if the cell is occupied
-				break;
-			}
-			move = new ArrayList<>();
-			move.add(-i);
-			move.add(i);
-			arrowShots.add(move);
-		}
-	
-		// SHOOT ARROW LEFT AND DOWN
-		for(int i=1; i<10; ++i) {
-			if(queenRow + i > 9 || queenCol - i < 0) { // Check if out of bounds
-				break;
-			} else if(board.boardState[queenRow + i][queenCol - i] != null) { // Check if the cell is occupied
-				break;
-			}
-			move = new ArrayList<>();
-			move.add(i);
-			move.add(-i);
-			arrowShots.add(move);
-		}
-
-		// SHOOT ARROW DOWN AND RIGHT
-		for(int i=1; i<10; ++i) {
-			if(queenRow + i > 9 || queenCol + i > 9) { // Check if out of bounds
-				break;
-			} else if(board.boardState[queenRow + i][queenCol + i] != null) { // Check if the cell is occupied
-				break;
-			}
-			move = new ArrayList<>();
-			move.add(i);
-			move.add(i);
-			arrowShots.add(move);
-		}
+	public boolean Equal(Actions action){
+		return (this.queenSpotX == action.queenSpotX
+				&& this.queenSpotY == action.queenSpotY
+				&& this.queenDestinationX == action.queenDestinationX
+				&& this.queenDestinationY == action.queenDestinationY
+				&& this.arrowDestinationX == action.arrowDestinationX
+				&& this.arrowDestinationY == action.arrowDestinationY);
 	}
+
+	public void printMove() {
+		System.out.println(this.queenSpotX + ", " + this.queenSpotY + ", " + this.queenDestinationX + ", " + this.queenDestinationY + ", " + this.arrowDestinationX + ", " + this.arrowDestinationY);
+	}
+
+
+
+
 }
