@@ -1,47 +1,50 @@
 package ubc.cosc322;
 
 public class Utility {
+    // Method to generate an action map based on the current board state
     public static int[][] getActionMap(int[][] board){
-        int[][] actionMap = new int[10][10];
-        for(int i = 0; i <10; i++){
-            for(int j= 0; j < 10; j++){
-                actionMap[i][j] = 0;
-                //Move up
+        int[][] actionMap = new int[10][10]; // Initialize the action map
+        for(int i = 0; i < 10; i++){
+            for(int j = 0; j < 10; j++){
+                actionMap[i][j] = 0; // Initialize each cell to 0
+                // Check if moving up is valid
                 if(validSpot(i-1, j, board)){
-                    actionMap[i][j] ++;
+                    actionMap[i][j]++;
                 }
-                //Move up and left
+                // Check if moving up and left is valid
                 if(validSpot(i-1, j-1, board)){
-                    actionMap[i][j] ++;
+                    actionMap[i][j]++;
                 }
-                //Move left
+                // Check if moving left is valid
                 if(validSpot(i, j-1, board)){
-                    actionMap[i][j] ++;
+                    actionMap[i][j]++;
                 }
-                //Move down left
+                // Check if moving down and left is valid
                 if(validSpot(i+1, j-1, board)){
-                    actionMap[i][j] ++;
+                    actionMap[i][j]++;
                 }
-                //Move down
+                // Check if moving down is valid
                 if(validSpot(i+1, j, board)){
-                    actionMap[i][j] ++;
+                    actionMap[i][j]++;
                 }
-                //Move down right
+                // Check if moving down and right is valid
                 if(validSpot(i+1, j+1, board)){
-                    actionMap[i][j] ++;
+                    actionMap[i][j]++;
                 }
-                //Move right
+                // Check if moving right is valid
                 if(validSpot(i, j+1, board)){
-                    actionMap[i][j] ++;
+                    actionMap[i][j]++;
                 }
-                //Move up and right
+                // Check if moving up and right is valid
                 if(validSpot(i-1, j+1, board)){
-                    actionMap[i][j] ++;
+                    actionMap[i][j]++;
                 }
             }  
         }
-        return actionMap;
+        return actionMap; // Return the generated action map
     }
+
+    // Method to print the board state
     public static void printBoard(int[][] board) {
         System.out.println("-----------------------------------------");
         for(int i = 0; i < 10; i++) {
@@ -49,10 +52,13 @@ public class Utility {
                 if(j == 0) {
                     System.out.print("| ");
                 }
+                // Print empty space for 0
                 if(board[i][j] == 0) {
                     System.out.print(' ');
+                // Print 'X' for 3
                 } else if(board[i][j] == 3) {
                     System.out.print('X');
+                // Print the value for other numbers
                 } else {
                     System.out.print(board[i][j]);
                 }
@@ -62,20 +68,19 @@ public class Utility {
         }
         System.out.println();
     }
-    
-    
-    
-    
-    
-    
-       public static boolean validSpot(int col, int row){
+
+    // Method to check if a spot is valid (within bounds)
+    public static boolean validSpot(int col, int row){
         return row >= 0 && row < 9 && col >= 0 && col < 9;
-       }
-       public static boolean validSpot(int row, int col, int[][] board){
+    }
+
+    // Method to check if a spot is valid and empty (within bounds and value is 0)
+    public static boolean validSpot(int row, int col, int[][] board){
         return row >= 0 && row < 9 && col >= 0 && col < 9 && board[row][col] == 0;
-       }
-       public static double sigmoid(double x) {
+    }
+
+    // Method to calculate the sigmoid function
+    public static double sigmoid(double x) {
         return 1 / (1 + Math.exp(-x/5));
-        }
-    
+    }
 }
