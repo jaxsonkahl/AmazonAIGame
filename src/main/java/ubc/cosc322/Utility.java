@@ -76,7 +76,7 @@ public class Utility {
 
     // Method to check if a spot is valid and empty (within bounds and value is 0)
     public static boolean validSpot(int row, int col, int[][] board){
-        return row >= 0 && row < 9 && col >= 0 && col < 9 && board[row][col] == 0;
+        return row >= 0 && row < 9 && col >= 0 && col < 9 && board[col][row] == 0;
     }
 
     // Method to calculate the sigmoid function
