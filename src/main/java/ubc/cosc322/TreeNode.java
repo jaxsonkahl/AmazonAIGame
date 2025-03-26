@@ -75,7 +75,7 @@ public class TreeNode {
     }
 
     private void generateMoves() {
-        this.availableMoves = ActionsFactory.getActions(this.boardState, this.playerColor);
+        this.availableMoves = ActionFactory.getActions(this.boardState, this.playerColor);
         this.movesGenerated = true;
     }
 
