@@ -113,15 +113,15 @@ public class Evaluator {
             boolean downLeftValid = true;
             for(int i = 1; i < 10; i++) {
                 // up
-                if(upValid && Utility.validSpot(posX, posY-i, board)) {
+                if(upValid && Utility.validSpot(posY-i,posX,board)) {
                     if(whiteMinDistance[posY-i][posX] > minDistance) {
                         whiteMinDistance[posY-i][posX] = minDistance;
                         whiteQueue.add(new int[]{posY-i, posX});
                     }
                 } else upValid = false;
                
-                // up left
-                if(upLeftValid && Utility.validSpot(posX-i, posY-i, board)) {
+                // up lefta
+                if(upLeftValid && Utility.validSpot(posY-i, posX-i, board)) {
                     if(whiteMinDistance[posY-i][posX-i] > minDistance) {
                         whiteMinDistance[posY-i][posX-i] = minDistance;
                         whiteQueue.add(new int[]{posY-i, posX-i});
@@ -129,7 +129,7 @@ public class Evaluator {
                 } else upLeftValid = false;
                
                 // left
-                if(leftValid && Utility.validSpot(posX-i, posY, board)) {
+                if(leftValid && Utility.validSpot(posY, posX-i, board)) {
                     if(whiteMinDistance[posY][posX-i] > minDistance) {
                         whiteMinDistance[posY][posX-i] = minDistance;
                         whiteQueue.add(new int[]{posY, posX-i});
@@ -137,7 +137,7 @@ public class Evaluator {
                 } else leftValid = false;
                
                 // down left
-                if(downLeftValid && Utility.validSpot(posX-i, posY+i, board)) {
+                if(downLeftValid && Utility.validSpot(posY+i,posX-i, board)) {
                     if(whiteMinDistance[posY+i][posX-i] > minDistance) {
                         whiteMinDistance[posY+i][posX-i] = minDistance;
                         whiteQueue.add(new int[]{posY+i, posX-i});
@@ -145,7 +145,7 @@ public class Evaluator {
                 } else downLeftValid = false;
                
                 // down
-                if(downValid && Utility.validSpot(posX, posY+i, board)) {
+                if(downValid && Utility.validSpot(posY+i, posX,board)) {
                     if(whiteMinDistance[posY+i][posX] > minDistance) {
                         whiteMinDistance[posY+i][posX] = minDistance;
                         whiteQueue.add(new int[]{posY+i, posX});
@@ -153,7 +153,7 @@ public class Evaluator {
                 } else downValid = false;
                
                 // down right
-                if(downRightValid && Utility.validSpot(posX+i, posY+i, board)) {
+                if(downRightValid && Utility.validSpot(posY+i,posX+i,board)) {
                     if(whiteMinDistance[posY+i][posX+i] > minDistance) {
                         whiteMinDistance[posY+i][posX+i] = minDistance;
                         whiteQueue.add(new int[]{posY+i, posX+i});
@@ -161,7 +161,7 @@ public class Evaluator {
                 } else downRightValid = false;
                
                 // right
-                if(rightValid && Utility.validSpot(posX+i, posY, board)) {
+                if(rightValid && Utility.validSpot(posY,posX+i, board)) {
                     if(whiteMinDistance[posY][posX+i] > minDistance) {
                         whiteMinDistance[posY][posX+i] = minDistance;
                         whiteQueue.add(new int[]{posY, posX+i});
@@ -169,7 +169,7 @@ public class Evaluator {
                 } else rightValid = false;
                
                 // up right
-                if(upRightValid && Utility.validSpot(posX+i, posY-i, board)) {
+                if(upRightValid && Utility.validSpot(posY-i,posX+i, board)) {
                     if(whiteMinDistance[posY-i][posX+i] > minDistance) {
                         whiteMinDistance[posY-i][posX+i] = minDistance;
                         whiteQueue.add(new int[]{posY-i, posX+i});
@@ -195,7 +195,7 @@ public class Evaluator {
             boolean downLeftValid = true;
             for(int i = 1; i < 10; i++) {
                 // up
-                if(upValid && Utility.validSpot(posX, posY-i, board)) {
+                if(upValid && Utility.validSpot(posY-i,posX, board)) {
                     if(blackMinDistance[posY-i][posX] > minDistance) {
                         blackMinDistance[posY-i][posX] = minDistance;
                         blackQueue.add(new int[]{posY-i, posX});
@@ -203,7 +203,7 @@ public class Evaluator {
                 } else upValid = false;
                
                 // up left
-                if(upLeftValid && Utility.validSpot(posX-i, posY-i, board)) {
+                if(upLeftValid && Utility.validSpot(posY-i,posX-i, board)) {
                     if(blackMinDistance[posY-i][posX-i] > minDistance) {
                         blackMinDistance[posY-i][posX-i] = minDistance;
                         blackQueue.add(new int[]{posY-i, posX-i});
@@ -211,7 +211,7 @@ public class Evaluator {
                 } else upLeftValid = false;
                
                 // left
-                if(leftValid && Utility.validSpot(posX-i, posY, board)) {
+                if(leftValid && Utility.validSpot( posY, posX-i,board)) {
                     if(blackMinDistance[posY][posX-i] > minDistance) {
                         blackMinDistance[posY][posX-i] = minDistance;
                         blackQueue.add(new int[]{posY, posX-i});
@@ -219,7 +219,7 @@ public class Evaluator {
                 } else leftValid = false;
                
                 // down left
-                if(downLeftValid && Utility.validSpot(posX-i, posY+i, board)) {
+                if(downLeftValid && Utility.validSpot(posY+i,posX-i, board)) {
                     if(blackMinDistance[posY+i][posX-i] > minDistance) {
                         blackMinDistance[posY+i][posX-i] = minDistance;
                         blackQueue.add(new int[]{posY+i, posX-i});
@@ -227,7 +227,7 @@ public class Evaluator {
                 } else downLeftValid = false;
                
                 // down
-                if(downValid && Utility.validSpot(posX, posY+i, board)) {
+                if(downValid && Utility.validSpot(posY+i,posX, board)) {
                     if(blackMinDistance[posY+i][posX] > minDistance) {
                         blackMinDistance[posY+i][posX] = minDistance;
                         blackQueue.add(new int[]{posY+i, posX});
@@ -235,7 +235,7 @@ public class Evaluator {
                 } else downValid = false;
                
                 // down right
-                if(downRightValid && Utility.validSpot(posX+i, posY+i, board)) {
+                if(downRightValid && Utility.validSpot(posY+i, posX+i, board)) {
                     if(blackMinDistance[posY+i][posX+i] > minDistance) {
                         blackMinDistance[posY+i][posX+i] = minDistance;
                         blackQueue.add(new int[]{posY+i, posX+i});
@@ -243,7 +243,7 @@ public class Evaluator {
                 } else downRightValid = false;
                
                 // right
-                if(rightValid && Utility.validSpot(posX+i, posY, board)) {
+                if(rightValid && Utility.validSpot(posY,posX+i, board)) {
                     if(blackMinDistance[posY][posX+i] > minDistance) {
                         blackMinDistance[posY][posX+i] = minDistance;
                         blackQueue.add(new int[]{posY, posX+i});
@@ -251,7 +251,7 @@ public class Evaluator {
                 } else rightValid = false;
                
                 // up right
-                if(upRightValid && Utility.validSpot(posX+i, posY-i, board)) {
+                if(upRightValid && Utility.validSpot(posY-i,posX+i, board)) {
                     if(blackMinDistance[posY-i][posX+i] > minDistance) {
                         blackMinDistance[posY-i][posX+i] = minDistance;
                         blackQueue.add(new int[]{posY-i, posX+i});
@@ -549,7 +549,6 @@ public class Evaluator {
                     queenEval += Math.pow(2, -(i-1)) * mobilityMap[posY+i][posX-i];
                 } else downLeftValid = false;
                
-                // down
                 // down
                 if(downValid && Utility.validSpot(posX, posY+i, board)) {
                     queenEval += Math.pow(2, -(i-1)) * mobilityMap[posY+i][posX];

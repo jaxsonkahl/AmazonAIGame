@@ -75,7 +75,7 @@ public class Utility {
     }
 
     // Method to check if a spot is valid and empty (within bounds and value is 0)
-    public static boolean validSpot(int row, int col, int[][] board){
+    public static boolean validSpot(int col, int row, int[][] board){
         return row >= 0 && row < 9 && col >= 0 && col < 9 && board[col][row] == 0;
     }
 
